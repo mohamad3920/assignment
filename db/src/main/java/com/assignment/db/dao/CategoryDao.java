@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
+public interface CategoryDao extends JpaRepository<CategoryEntity, Long> {
 }

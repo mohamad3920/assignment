@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="ROOT_LEVEL" value="INFO"/>
+    <property name="THIRDPARTY_LEVEL" value="ERROR"/>
+    <property name="EXCEPTION_DEPTH" value="15"/>
+    <property name="MAX_FILE_SIZE" value="10MB"/>
+    <property name="LOG_PATH" value="logs"/>
+
+    <property name="PATTERN"
+              value="&lt;LOG:event logger=%logger at=%d{yyyy-MM-dd HH:mm:ss.SSS} level=%level>%n&lt;LOG:message>%m&lt;/LOG:message>%n&lt;/LOG:event>%n %n %rEx{${EXCEPTION_DEPTH}}"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/assignment.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/mana-%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>${MAX_FILE_SIZE}</MaxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework">
+        <level value="${THIRDPARTY_LEVEL}"/>
+    </logger>
+    <logger name="org.springframework.orm">
+        <level value="${THIRDPARTY_LEVEL}"/>
+    </logger>
+    <logger name="org.springframework.jdbc">
+        <level value="${THIRDPARTY_LEVEL}"/>
+    </logger>
+    <logger name="org.hibernate.event">
+        <level value="${THIRDPARTY_LEVEL}"/>
+    </logger>
+    <logger name="com.zaxxer.hikari">
+        <level value="${THIRDPARTY_LEVEL}"/>
+    </logger>
+    <logger name="org.slf4j">
+        <level value="${THIRDPARTY_LEVEL}"/>
+    </logger>
+    <logger name="ch.qos.logback">
+        <level value="${THIRDPARTY_LEVEL}"/>
+    </logger>
+
+    <root level="${ROOT_LEVEL}">
+        <appender-ref ref="ROLLING"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>
