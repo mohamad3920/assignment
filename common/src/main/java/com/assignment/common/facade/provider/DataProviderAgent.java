@@ -6,8 +6,9 @@ import com.assignment.common.dto.ExpenseDto;
 public interface DataProviderAgent {
     CategoryDto saveCategory(CategoryDto request);
     CategoryDto editCategory(CategoryDto request);
-    void removeCategory(Integer catId);
+    void deleteCategory(Long catId);
+    CategoryDto getCategoryById(Long id);
     ExpenseDto saveExpense(ExpenseDto request);
     ExpenseDto editExpense(ExpenseDto request);
-    void removeExpense(Integer expenseId);
+    void deleteExpense(Long expenseId);
 }

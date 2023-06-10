@@ -6,9 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -22,6 +20,30 @@ public class CategoryController {
         log.info("entering saveCategory service");
         log.debug("with request: {}", requestDto);
         CategoryDto result = dataProviderAgent.saveCategory(requestDto);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("getCategoryById/{id}")
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable("id") Long id) {
+        log.info("entering getCategoryById service");
+        log.debug("with request: {}", id);
+        CategoryDto result = dataProviderAgent.getCategoryById(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @DeleteMapping("deleteCategoryById/{id}")
+    public ResponseEntity<CategoryDto> deleteCategoryById(@PathVariable("id") Long id) {
+        log.info("entering deleteCategoryById service");
+        log.debug("with request: {}", id);
+        dataProviderAgent.deleteCategory(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("editCategory")
+    public ResponseEntity<CategoryDto> editCategory(@RequestBody CategoryDto request) {
+        log.info("entering CategoryDto service");
+        log.debug("with request: {}", request);
+        CategoryDto result = dataProviderAgent.editCategory(request);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class ExpenseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "expenseId", nullable = false)
     private Long id;
     @Column(name = "price")
@@ -20,7 +20,7 @@ public class ExpenseEntity {
     @Column(name = "entryDate")
     private Date entryDate;
 
-    @ManyToOne()
-    @JoinColumn(name = "catId", referencedColumnName = "catId")
-    private CategoryEntity category;
+//    @ManyToOne()
+//    @JoinColumn(name = "category", referencedColumnName = "catId")
+//    private CategoryEntity category;
 }

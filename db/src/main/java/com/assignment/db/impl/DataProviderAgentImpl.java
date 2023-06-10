@@ -1,11 +1,12 @@
-package com.assignment.db;
+package com.assignment.db.impl;
 
 import com.assignment.common.dto.CategoryDto;
 import com.assignment.common.dto.ExpenseDto;
 import com.assignment.common.facade.provider.DataProviderAgent;
-import com.assignment.db.dao.CategoryDao;
-import com.assignment.db.dao.ExpenseDao;
-import com.assignment.db.dao.ReportDao;
+import com.assignment.db.entity.ExpenseEntity;
+import com.assignment.db.repository.CategoryRepository;
+import com.assignment.db.repository.ExpenseRepository;
+import com.assignment.db.repository.ReportRepository;
 import com.assignment.db.entity.CategoryEntity;
 import com.assignment.db.mapper.DbProviderMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class DataProviderAgentImpl implements DataProviderAgent {
     @Autowired
-    CategoryDao categoryDao;
+    CategoryRepository categoryRepository;
     @Autowired
-    ExpenseDao expenseDao;
+    ExpenseRepository expenseRepository;
     @Autowired
-    ReportDao reportDao;
+    ReportRepository reportRepository;
 
     private DbProviderMapper dbProviderMapper = Mappers.getMapper(DbProviderMapper.class);
 
@@ -31,32 +32,43 @@ public class DataProviderAgentImpl implements DataProviderAgent {
     public CategoryDto saveCategory(CategoryDto request) {
         log.info("entering saveCategory dao");
         CategoryEntity catReq = dbProviderMapper.categoryD2E(request);
-        CategoryEntity cat = categoryDao.save(catReq);
+        CategoryEntity cat = categoryRepository.save(catReq);
         return dbProviderMapper.categoryE2D(cat);
     }
 
     @Override
     public CategoryDto editCategory(CategoryDto request) {
-        return null;
+        return saveCategory(request);
     }
 
     @Override
-    public void removeCategory(Integer catId) {
+    public void deleteCategory(Long catId) {
+        log.info("entering removeCategory dao");
+        categoryRepository.deleteById(catId);
+    }
 
+    public CategoryDto getCategoryById(Long id) {
+        log.info("entering getCategoryById dao");
+        CategoryEntity cat = categoryRepository.getReferenceById(id);
+        return dbProviderMapper.categoryE2D(cat);
     }
 
     @Override
     public ExpenseDto saveExpense(ExpenseDto request) {
-        return null;
+        log.info("entering saveExpense dao");
+        ExpenseEntity expReq = dbProviderMapper.ExpenseD2E(request);
+        ExpenseEntity exp = expenseRepository.save(expReq);
+        return dbProviderMapper.ExpenseE2D(exp);
     }
 
     @Override
     public ExpenseDto editExpense(ExpenseDto request) {
-        return null;
+        return saveExpense(request);
     }
 
     @Override
-    public void removeExpense(Integer expenseId) {
-
+    public void deleteExpense(Long expenseId) {
+        log.info("entering removeExpense dao");
+        expenseRepository.deleteById(expenseId);
     }
 }
