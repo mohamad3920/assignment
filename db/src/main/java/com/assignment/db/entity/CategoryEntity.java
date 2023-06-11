@@ -18,6 +18,9 @@ public class CategoryEntity {
     @Column(name = "expenseLimit")
     private Long expenseLimit;
 
+    @OneToMany(mappedBy = "category")
+    private List<ExpenseEntity> expenses;
+
 //    @ManyToOne()
 //    @JoinColumn(name = "userId", referencedColumnName = "userId")
 //    private UserEntity userId;
@@ -28,7 +31,4 @@ public class CategoryEntity {
 //
 //    @OneToMany(mappedBy = "parentId")
 //    private Collection<CategoryEntity> childCats;
-
-//    @OneToMany(mappedBy = "category")
-//    private List<ExpenseEntity> expenses;
 }

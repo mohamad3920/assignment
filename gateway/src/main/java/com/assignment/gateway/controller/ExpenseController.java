@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 public class ExpenseController {
@@ -25,7 +27,10 @@ public class ExpenseController {
 
     @GetMapping("/getExpensesByCat/{id}")
     public ResponseEntity getExpensesByCat(@PathVariable("id") Long catId) {
-        return new ResponseEntity(HttpStatus.OK);
+        log.info("entering getExpensesByCat service");
+        log.debug("with request: {}", catId);
+        List<ExpenseDto> result = dataProviderAgent.getExpensesByCat(catId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("deleteExpenseById/{id}")

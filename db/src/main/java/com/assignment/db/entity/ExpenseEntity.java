@@ -20,7 +20,7 @@ public class ExpenseEntity {
     @Column(name = "entryDate")
     private Date entryDate;
 
-//    @ManyToOne()
-//    @JoinColumn(name = "category", referencedColumnName = "catId")
-//    private CategoryEntity category;
+    @ManyToOne()
+    @JoinColumn(name = "catId", referencedColumnName = "catId")
+    private CategoryEntity category;
 }

@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Service
 @Transactional
@@ -54,6 +57,15 @@ public class DataProviderAgentImpl implements DataProviderAgent {
     }
 
     @Override
+    public List<CategoryDto> getAllCategory() {
+        log.info("entering getAllCategory dao");
+        List<CategoryEntity> all = categoryRepository.findAll();
+        List<CategoryDto> result = new ArrayList<>();
+        all.forEach(x -> result.add(dbProviderMapper.categoryE2D(x)));
+        return result;
+    }
+
+    @Override
     public ExpenseDto saveExpense(ExpenseDto request) {
         log.info("entering saveExpense dao");
         ExpenseEntity expReq = dbProviderMapper.ExpenseD2E(request);
@@ -70,5 +82,14 @@ public class DataProviderAgentImpl implements DataProviderAgent {
     public void deleteExpense(Long expenseId) {
         log.info("entering removeExpense dao");
         expenseRepository.deleteById(expenseId);
+    }
+
+    @Override
+    public List<ExpenseDto> getExpensesByCat(Long id) {
+        log.info("entering getExpensesByCat dao");
+        List<ExpenseEntity> exp = expenseRepository.findExpenseEntitiesByCategory_Id(id);
+        List<ExpenseDto> result = new ArrayList<>();
+        exp.forEach(x -> result.add(dbProviderMapper.ExpenseE2D(x)));
+        return null;
     }
 }

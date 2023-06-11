@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 public class CategoryController {
@@ -29,6 +31,13 @@ public class CategoryController {
         log.debug("with request: {}", id);
         CategoryDto result = dataProviderAgent.getCategoryById(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("getAllCategory")
+    public ResponseEntity<List<CategoryDto>> getAllCategory() {
+        log.info("entering getAllCategory service");
+        List<CategoryDto> result = dataProviderAgent.getAllCategory();
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
     @DeleteMapping("deleteCategoryById/{id}")
