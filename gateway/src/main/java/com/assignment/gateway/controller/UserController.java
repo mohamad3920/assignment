@@ -42,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    @PostMapping("/users")
+    @PostMapping("/createUser")
     public ResponseEntity<?> createUser(@RequestBody UserDto user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userProviderAgent.addUser(user);

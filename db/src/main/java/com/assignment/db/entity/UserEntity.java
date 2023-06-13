@@ -24,8 +24,8 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-//    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
-//    private List<CategoryEntity> category;
+    @OneToMany(mappedBy = "user")
+    private List<CategoryEntity> categories;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

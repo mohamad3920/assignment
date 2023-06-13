@@ -2,7 +2,7 @@ package com.assignment.db.impl;
 
 import com.assignment.common.dto.UserDto;
 import com.assignment.common.facade.provider.UserProviderAgent;
-import com.assignment.db.mapper.UserMapper;
+import com.assignment.db.mapper.DbProviderMapper;
 import com.assignment.db.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDetailsServiceImpl implements UserProviderAgent {
 
     private final UserRepository userRepository;
-    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    private DbProviderMapper dbProviderMapper = Mappers.getMapper(DbProviderMapper.class);
 
     public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -32,6 +32,6 @@ public class UserDetailsServiceImpl implements UserProviderAgent {
     @Override
     public UserDto addUser(UserDto user) {
         log.info("saving user");
-        return userMapper.userE2D(userRepository.save(userMapper.userD2E(user)));
+        return dbProviderMapper.userE2D(userRepository.save(dbProviderMapper.userD2E(user)));
     }
 }

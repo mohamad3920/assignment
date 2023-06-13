@@ -8,8 +8,10 @@ import java.util.List;
 
 @Data
 @ToString
-public class CategoryDto implements Serializable {
+public class CategoryExpensesDto implements Serializable {
     private Long id;
     private String name;
     private Long expenseLimit;
+    private String info;
+    private List<ExpenseDto> expenses;
 }

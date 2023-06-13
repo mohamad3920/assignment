@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
                 "com.assignment.gateway",
                 "com.assignment.common",
                 "com.assignment.db",
+                "com.assignment.domain"
         },
         exclude = {SecurityAutoConfiguration.class}
 )

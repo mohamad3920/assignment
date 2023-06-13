@@ -21,9 +21,9 @@ public class CategoryEntity {
     @OneToMany(mappedBy = "category")
     private List<ExpenseEntity> expenses;
 
-//    @ManyToOne()
-//    @JoinColumn(name = "userId", referencedColumnName = "userId")
-//    private UserEntity userId;
+    @ManyToOne()
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private UserEntity user;
 
 //    @ManyToOne()
 //    @JoinColumn(name = "cat_id", referencedColumnName = "catId")

@@ -8,6 +8,7 @@
         <module>db</module>
         <module>common</module>
         <module>application</module>
+        <module>domain</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

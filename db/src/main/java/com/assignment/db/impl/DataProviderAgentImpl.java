@@ -1,17 +1,22 @@
 package com.assignment.db.impl;
 
-import com.assignment.common.dto.CategoryDto;
-import com.assignment.common.dto.ExpenseDto;
+import com.assignment.common.dto.*;
+import com.assignment.common.exeption.UserNotLogin;
 import com.assignment.common.facade.provider.DataProviderAgent;
 import com.assignment.db.entity.ExpenseEntity;
+import com.assignment.db.entity.UserEntity;
 import com.assignment.db.repository.CategoryRepository;
 import com.assignment.db.repository.ExpenseRepository;
 import com.assignment.db.repository.ReportRepository;
 import com.assignment.db.entity.CategoryEntity;
 import com.assignment.db.mapper.DbProviderMapper;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +34,27 @@ public class DataProviderAgentImpl implements DataProviderAgent {
     @Autowired
     ReportRepository reportRepository;
 
+    @SneakyThrows
+    private UserEntity getUser() {
+        var result = new UserEntity();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            if (authentication instanceof AnonymousAuthenticationToken) {
+                throw new UserNotLogin("user need to get login first");
+            } else {
+                result = (UserEntity) authentication.getPrincipal();
+            }
+        }
+        return result;
+    }
+
     private DbProviderMapper dbProviderMapper = Mappers.getMapper(DbProviderMapper.class);
 
     @Override
     public CategoryDto saveCategory(CategoryDto request) {
         log.info("entering saveCategory dao");
         CategoryEntity catReq = dbProviderMapper.categoryD2E(request);
+        catReq.setUser(getUser());
         CategoryEntity cat = categoryRepository.save(catReq);
         return dbProviderMapper.categoryE2D(cat);
     }
@@ -47,21 +67,39 @@ public class DataProviderAgentImpl implements DataProviderAgent {
     @Override
     public void deleteCategory(Long catId) {
         log.info("entering removeCategory dao");
-        categoryRepository.deleteById(catId);
+        categoryRepository.deleteCategoryEntitiesByIdAndUser(catId, getUser());
     }
 
     public CategoryDto getCategoryById(Long id) {
         log.info("entering getCategoryById dao");
-        CategoryEntity cat = categoryRepository.getReferenceById(id);
+        CategoryEntity cat = categoryRepository.getCategoryEntitiesByIdAndUser(id, getUser());
         return dbProviderMapper.categoryE2D(cat);
     }
 
     @Override
-    public List<CategoryDto> getAllCategory() {
+    public CategoryExpensesDto getCategoryExpensesById(Long id) {
+        log.info("entering getCategoryExpensesById dao");
+        CategoryEntity cat = categoryRepository.getCategoryEntitiesByIdAndUser(id, getUser());
+        return dbProviderMapper.categoryE2CatExp(cat);
+    }
+
+    @Override
+    public AllCategoriesDto getAllCategory() {
         log.info("entering getAllCategory dao");
-        List<CategoryEntity> all = categoryRepository.findAll();
-        List<CategoryDto> result = new ArrayList<>();
-        all.forEach(x -> result.add(dbProviderMapper.categoryE2D(x)));
+        List<CategoryEntity> all = categoryRepository.getCategoryEntitiesByUser(getUser());
+        var result = new AllCategoriesDto();
+        result.setCategories(new ArrayList<>());
+        all.forEach(x -> result.getCategories().add(dbProviderMapper.categoryE2D(x)));
+        return result;
+    }
+
+    @Override
+    public AllCategoryExpensesDto getAllCategoryExpenses() {
+        log.info("entering getAllCategoryExpenses dao");
+        List<CategoryEntity> all = categoryRepository.getCategoryEntitiesByUser(getUser());
+        var result = new AllCategoryExpensesDto();
+        result.setCategoryExpenses(new ArrayList<>());
+        all.forEach(x -> result.getCategoryExpenses().add(dbProviderMapper.categoryE2CatExp(x)));
         return result;
     }
 
